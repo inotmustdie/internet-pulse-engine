@@ -36,7 +36,7 @@ final class RiskEngine
         }
 
         arsort($layerWeights);
-        $riskScore = min(100, (int) round($rawScore / max(1, count($affected)) * 10));
+        $riskScore = min(100, (int) round($rawScore / max(1, count($affected)) * 12));
 
         return new RiskAssessment(
             scenarioId: $scenario->id,
