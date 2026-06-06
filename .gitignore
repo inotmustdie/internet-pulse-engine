@@ -3,6 +3,4 @@
 /.vscode/
 /.phpunit.cache/
 /.pest-cache/
-/.env
-/.env.local
 composer.lock

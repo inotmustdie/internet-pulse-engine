@@ -1,6 +1,6 @@
 {
-    "name": "inotmustdie/careops-ai-assistant-api",
-    "description": "Backend showcase for appointment workflows, AI-assisted routing, and async notifications.",
+    "name": "inotmustdie/internet-pulse-engine",
+    "description": "Risk engine for modelling critical internet infrastructure dependencies.",
     "type": "project",
     "license": "MIT",
     "require": {
@@ -11,7 +11,7 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "app/"
+            "InternetPulse\\": "src/"
         }
     },
     "autoload-dev": {

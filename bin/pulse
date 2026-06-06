@@ -1,0 +1,51 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+use InternetPulse\Catalog\InternetCatalog;
+use InternetPulse\Engine\RiskEngine;
+use InternetPulse\Support\JsonResponse;
+
+require __DIR__ . '/../vendor/autoload.php';
+
+$command = $argv[1] ?? 'help';
+$argument = $argv[2] ?? null;
+
+$catalog = new InternetCatalog();
+$engine = new RiskEngine();
+
+if ($command === 'scenario') {
+    $scenarioId = $argument ?? '';
+    $scenarios = $catalog->scenarios();
+
+    if (! isset($scenarios[$scenarioId])) {
+        fwrite(STDERR, "Unknown scenario. Try: " . implode(', ', array_keys($scenarios)) . PHP_EOL);
+        exit(1);
+    }
+
+    echo JsonResponse::encode($engine->assess($scenarios[$scenarioId], $catalog->nodes())->toArray());
+    exit(0);
+}
+
+if ($command === 'export') {
+    $payload = [];
+    foreach ($catalog->scenarios() as $scenario) {
+        $payload[] = $engine->assess($scenario, $catalog->nodes())->toArray();
+    }
+
+    echo JsonResponse::encode(['assessments' => $payload]);
+    exit(0);
+}
+
+echo <<<TXT
+Internet Pulse Engine
+
+Usage:
+  php bin/pulse scenario dns-root-degradation
+  php bin/pulse scenario cloud-region-loss
+  php bin/pulse scenario transit-route-leak
+  php bin/pulse scenario certificate-validation-failure
+  php bin/pulse export
+
+TXT;
