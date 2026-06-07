@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace InternetPulse\Support;
+namespace NbaStatline\Support;
 
 final class JsonResponse
 {

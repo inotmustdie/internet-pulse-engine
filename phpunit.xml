@@ -4,7 +4,7 @@
          bootstrap="vendor/autoload.php"
          colors="true">
     <testsuites>
-        <testsuite name="Internet Pulse">
+        <testsuite name="NBA Statline">
             <directory>tests</directory>
         </testsuite>
     </testsuites>

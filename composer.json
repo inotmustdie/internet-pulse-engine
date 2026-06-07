@@ -1,6 +1,6 @@
 {
-    "name": "inotmustdie/internet-pulse-engine",
-    "description": "Risk engine for modelling critical internet infrastructure dependencies.",
+    "name": "inotmustdie/nba-statline-service",
+    "description": "Backend showcase service for NBA statistics, analytics, leaderboards, and team summaries.",
     "type": "project",
     "license": "MIT",
     "require": {
@@ -11,7 +11,7 @@
     },
     "autoload": {
         "psr-4": {
-            "InternetPulse\\": "src/"
+            "NbaStatline\\": "src/"
         }
     },
     "autoload-dev": {

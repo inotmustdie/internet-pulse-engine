@@ -1,0 +1,65 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+use NbaStatline\Analytics\MetricCalculator;
+use NbaStatline\Application\LeaderboardService;
+use NbaStatline\Application\TeamSummaryService;
+use NbaStatline\Infrastructure\LocalNbaStatsProvider;
+use NbaStatline\Support\JsonResponse;
+
+require __DIR__ . '/../vendor/autoload.php';
+
+$provider = new LocalNbaStatsProvider();
+$calculator = new MetricCalculator();
+$leaderboards = new LeaderboardService($provider, $calculator);
+$teams = new TeamSummaryService($provider, $calculator);
+
+$command = $argv[1] ?? 'help';
+$argument = $argv[2] ?? null;
+
+if ($command === 'leaders') {
+    $metric = $argument ?? 'points';
+    $leaders = array_map(
+        static fn ($leader): array => $leader->toArray(),
+        $leaderboards->leaders($metric),
+    );
+
+    echo JsonResponse::encode([
+        'metric' => $metric,
+        'leaders' => $leaders,
+    ]);
+    exit(0);
+}
+
+if ($command === 'team') {
+    echo JsonResponse::encode($teams->summary((string) $argument));
+    exit(0);
+}
+
+if ($command === 'export') {
+    echo JsonResponse::encode([
+        'leaders' => [
+            'points' => array_map(static fn ($leader): array => $leader->toArray(), $leaderboards->leaders('points')),
+            'true_shooting' => array_map(static fn ($leader): array => $leader->toArray(), $leaderboards->leaders('true-shooting')),
+            'usage_proxy' => array_map(static fn ($leader): array => $leader->toArray(), $leaderboards->leaders('usage-proxy')),
+        ],
+    ]);
+    exit(0);
+}
+
+echo <<<TXT
+NBA Statline Service
+
+Usage:
+  php bin/statline leaders points
+  php bin/statline leaders true-shooting
+  php bin/statline leaders effective-fg
+  php bin/statline leaders points-per-36
+  php bin/statline leaders assist-turnover
+  php bin/statline leaders usage-proxy
+  php bin/statline team DEN
+  php bin/statline export
+
+TXT;
